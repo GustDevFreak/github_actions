@@ -20,12 +20,12 @@ jobs:
           password: ${{ secrets.DOCKER_HUB_ACCESS_TOKEN }}
 
       - name: Pull latest Docker image
-        run: docker pull ${{ secrets.DOCKER_HUB_USERNAME }}/github_actions:latest
+        run: docker pull ${{ secrets.DOCKER_HUB_USERNAME }}/diplomado:latest
 
       - name: Stop and remove existing Docker container
         run: |
-          docker stop proyecto_diplomado_pedidos || true
-          docker rm proyecto_diplomado_pedidos || true
+          docker stop diplomado || true
+          docker rm diplomado || true
 
       - name: Start Docker container
-        run: docker run -d --name proyecto_diplomado_pedidos -p 8000:8000 ${{ secrets.DOCKER_HUB_USERNAME }}/github_actions:latest
+        run: docker run -d --name diplomado -p 8000:8000 ${{ secrets.DOCKER_HUB_USERNAME }}/diplomado:latest

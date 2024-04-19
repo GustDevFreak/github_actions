@@ -10,14 +10,16 @@ WORKDIR /app
 COPY . .
 RUN rm -rf /app/vendor
 RUN rm -rf /app/composer.lock
-RUN composer install
 RUN composer require laravel/octane spiral/roadrunner
 COPY .env.example .env
+RUN composer install
+RUN php artisan key:generate
+RUN php artisan storage:link
 RUN mkdir -p /app/storage/logs
 RUN php artisan cache:clear
 RUN php artisan view:clear
 RUN php artisan config:clear
-RUN php artisan migrate --force
+RUN php artisan migrate:fresh --seed
 RUN php artisan octane:install --server="swoole"
 CMD php artisan octane:start --server="swoole" --host="0.0.0.0"
 
