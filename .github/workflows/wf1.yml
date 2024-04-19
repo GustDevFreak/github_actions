@@ -19,13 +19,13 @@ jobs:
           username: ${{ secrets.DOCKER_HUB_USERNAME }}
           password: ${{ secrets.DOCKER_HUB_ACCESS_TOKEN }}
 
-      - name: Pull latest Docker image
-        run: docker pull ${{ secrets.DOCKER_HUB_USERNAME }}/diplomado:latest
-
-      - name: Stop and remove existing Docker container
-        run: |
-          docker stop diplomado || true
-          docker rm diplomado || true
-
-      - name: Start Docker container
-        run: docker run -d --name diplomado -p 8000:8000 ${{ secrets.DOCKER_HUB_USERNAME }}/diplomado:latest
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v1
+      - name: Build and push
+        uses: docker/build-push-action@v2
+        with:
+          context: .
+          file: ./Dockerfile
+          platforms: linux/amd64,linux/arm64
+          push: true
+          tags: ${{ secrets.DOCKER_HUB_USERNAME }}/diplomado:latest
