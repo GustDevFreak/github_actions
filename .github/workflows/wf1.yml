@@ -23,7 +23,9 @@ jobs:
         run: docker pull ${{ secrets.DOCKER_HUB_USERNAME }}/github_actions:latest
 
       - name: Stop and remove existing Docker container
-        run: docker-compose down
+        run: |
+          docker stop proyecto_diplomado_pedidos || true
+          docker rm proyecto_diplomado_pedidos || true
 
       - name: Start Docker container
-        run: docker-compose up -d
+        run: docker run -d --name proyecto_diplomado_pedidos -p 8000:8000 ${{ secrets.DOCKER_HUB_USERNAME }}/github_actions:latest
